@@ -41,7 +41,7 @@
     /* ===== Container & Card Styles ===== */
     .container {
       width: 90%;
-      max-width: 800px;
+      max-width: 1200px;
       margin: 2rem auto;
       padding: 2rem;
       background: var(--card-bg);
@@ -156,12 +156,14 @@
       margin-bottom: 1rem;
       color: var(--mantis);
     }
+    /* Set aspect ratio to 1:1 with a maximum size of 1024px */
     .notebook-container {
       position: relative;
-      width: 300px;
-      height: 400px;
+      width: 1024px;
+      max-width: 90%;
+      aspect-ratio: 1 / 1;
       margin: 0 auto 1rem auto;
-      perspective: 1200px;
+      perspective: 1500px;
       border: 2px solid var(--mantis);
       border-radius: 8px;
       overflow: hidden;
@@ -173,7 +175,8 @@
       background-size: cover;
       background-position: center;
       transform-style: preserve-3d;
-      transition: transform 0.5s ease;
+      /* Improved transition with a custom cubic-bezier easing */
+      transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
     .notebook-nav {
       margin-top: 1rem;
@@ -248,8 +251,7 @@
     @media (max-width: 600px) {
       .notebook-container {
         width: 90%;
-        height: auto;
-        aspect-ratio: 3/4;
+        aspect-ratio: 1 / 1;
       }
       .container, .card {
         padding: 1rem;
@@ -281,7 +283,7 @@
     </div>
   </div>
 
-  <!-- Header (Optional additional branding) with Wallet Connection -->
+  <!-- Header with Wallet Connection -->
   <header>
     <h2>Connect &amp; Explore</h2>
     <p>Connect your Phantom wallet to begin your journey and download pages.</p>
@@ -300,7 +302,7 @@
       </p>
     </section>
 
-    <!-- Notebook Flipbook Section (placed above the day entries) -->
+    <!-- Notebook Flipbook Section -->
     <section id="notebook-section" class="card">
       <h2 class="notebook-title">The Mysterious Notebook</h2>
       <div class="notebook-container">
@@ -310,11 +312,11 @@
         <button id="prevNotebook">&laquo; Prev Page</button>
         <button id="nextNotebook">Next Page &raquo;</button>
       </div>
-      <!-- Download Button (shown when wallet connected) -->
+      <!-- Download Button (visible when wallet connected) -->
       <button id="downloadPage">Download this Page</button>
     </section>
 
-    <!-- Journal Entry Section (Synced with Notebook Flipbook) -->
+    <!-- Journal Entry Section -->
     <section id="journalEntry" class="card entry">
       <!-- The journal content will update automatically based on the notebook page -->
     </section>
@@ -328,63 +330,63 @@
     /**********************************
      * Journal & Notebook Synchrony   *
      **********************************/
-    // Journal data for 10 pages
+    // Journal data for 13 pages (adjusted as needed)
     const journalPages = [
-    {
+      {
         day: "Cover: The Leather Journal",
         content: "An intricately embossed leather cover, weathered by time and imbued with secrets of nature and forgotten lore."
-    },
-    {
+      },
+      {
         day: "Page 2: Botanical Beginnings",
         content: "General notes on the surrounding flora—lush greenery, rare blooms, and the soft whispers of an ancient garden."
-    },
-    {
+      },
+      {
         day: "Page 3: Verdant Discoveries",
         content: "Detailed sketches of exotic leaves and curious vines, hinting at the wild magic of nature."
-    },
-    {
+      },
+      {
         day: "Page 4: Hidden Life",
         content: "Observations on microscopic organisms and the delicate balance sustaining a forgotten ecosystem."
-    },
-    {
+      },
+      {
         day: "Page 5: Floral Musings",
         content: "A medley of botanical sketches and poetic musings on the interplay of light and color across ancient petals."
-    },
-    {
+      },
+      {
         day: "Page 6: Creatures of the Understory",
         content: "Notes on the insects, small mammals, and birds that animate the dense undergrowth, lending life to the pages."
-    },
-    {
+      },
+      {
         day: "Page 7: Curious Head Salamander",
-        content: "A detailed observation of a salamander with an unusually curious head. Its wide, inquisitive eyes and quirky features suggest a creature full of enigmatic intelligence."
-    },
-    {
+        content: "A detailed observation of a salamander with an unusually curious head. Its wide, inquisitive eyes and quirky features exude enigmatic intelligence."
+      },
+      {
         day: "Page 8: Ancient Salamander",
         content: "This venerable salamander seems to have witnessed the passage of centuries. Its time-worn scales and measured gait evoke wisdom and mystery."
-    },
-    {
+      },
+      {
         day: "Page 9: Electric Salamander",
-        content: "An electrifying specimen with pulsating patterns along its skin. Its vibrant, almost neon hues light up the twilight of the swamp."
-    },
-    {
+        content: "An electrifying specimen with pulsating patterns along its skin. Its vibrant, almost neon hues illuminate the twilight of the swamp."
+      },
+      {
         day: "Page 10: Scaled Dinosaur Salamander",
-        content: "A creature reminiscent of prehistoric reptiles, this salamander boasts robust, rugged scales and a presence that commands respect in the wild."
-    },
-    {
+        content: "A creature reminiscent of prehistoric reptiles, boasting robust, rugged scales and an imposing presence in the wild."
+      },
+      {
         day: "Page 11: Fire and Volcano Salamander",
-        content: "A being of blazing hues and molten temperament, as if forged in the heart of a volcano. Its fiery colors and dynamic energy are as captivating as they are formidable."
-    },
-    {
+        content: "A being of blazing hues and molten temperament, as if forged in the heart of a volcano. Its fiery colors captivate with dynamic energy."
+      },
+      {
         day: "Page 12: Mythical Ancient Axolotl",
-        content: "Shrouded in myth, this salamander-like axolotl exudes an otherworldly aura. Its mysterious regenerative powers and serene demeanor make it seem almost magical."
-    },
-    {
+        content: "Shrouded in myth, this salamander-like axolotl exudes an otherworldly aura. Its regenerative powers and serene demeanor border on the magical."
+      },
+      {
         day: "Page 13: Camouflage Marbled Salamander",
-        content: "A master of disguise, this salamander’s marbled patterns allow it to blend seamlessly into its surroundings. A moving enigma on the forest floor, its stealth is as impressive as its beauty."
-    }
+        content: "A master of disguise, this salamander’s marbled patterns enable it to blend seamlessly with its surroundings. Its stealth and beauty are equally mesmerizing."
+      }
     ];
-    
-    // Notebook images for 10 pages – replace these with your actual images if desired.
+
+    // Notebook images for 13 pages – update these with your actual file paths
     const notebookPages = [
         'images/notebook-page1.webp',
         'images/notebook-page2.webp',
@@ -422,9 +424,9 @@
     // Initialize with the first page.
     updatePage();
 
-    // Flip to next page with a two-step rotation animation.
+    // Flip to next page with an improved two-step rotation animation.
     function flipNextPage() {
-      notebookPageEl.style.transition = 'transform 0.5s ease';
+      notebookPageEl.style.transition = 'transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
       notebookPageEl.style.transform = 'rotateY(-90deg)';
       notebookPageEl.addEventListener('transitionend', function handler() {
         currentIndex = (currentIndex + 1) % notebookPages.length;
@@ -433,15 +435,15 @@
         notebookPageEl.style.transform = 'rotateY(90deg)';
         // Force reflow
         void notebookPageEl.offsetWidth;
-        notebookPageEl.style.transition = 'transform 0.5s ease';
+        notebookPageEl.style.transition = 'transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
         notebookPageEl.style.transform = 'rotateY(0deg)';
         notebookPageEl.removeEventListener('transitionend', handler);
       }, { once: true });
     }
 
-    // Flip to previous page with a similar reverse animation.
+    // Flip to previous page with a similar improved animation.
     function flipPrevPage() {
-      notebookPageEl.style.transition = 'transform 0.5s ease';
+      notebookPageEl.style.transition = 'transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
       notebookPageEl.style.transform = 'rotateY(90deg)';
       notebookPageEl.addEventListener('transitionend', function handler() {
         currentIndex = (currentIndex - 1 + notebookPages.length) % notebookPages.length;
@@ -449,7 +451,7 @@
         notebookPageEl.style.transition = 'none';
         notebookPageEl.style.transform = 'rotateY(-90deg)';
         void notebookPageEl.offsetWidth;
-        notebookPageEl.style.transition = 'transform 0.5s ease';
+        notebookPageEl.style.transition = 'transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
         notebookPageEl.style.transform = 'rotateY(0deg)';
         notebookPageEl.removeEventListener('transitionend', handler);
       }, { once: true });
