@@ -524,46 +524,54 @@
     // *********************************
     // Download Current Notebook Page
     // *********************************
-    function downloadCurrentPage() {
+    
+  // Improved download function: integrates the journal text and the image into a PDF,
+  // placing the text at the top and the image below while keeping a 1024x1024 page.
+  function downloadCurrentPage() {
     const pageData = journalPages[currentIndex];
     const imageUrl = notebookPages[currentIndex];
-    
-    // Load the image and then create the PDF
+
     getDataUrl(imageUrl, function(dataUrl) {
       if (!dataUrl) {
         alert("Failed to load the image for PDF generation.");
         return;
       }
-      // Using jsPDF from the imported library
       const { jsPDF } = window.jspdf;
-      // Create a new PDF document with a 1024x1024 page size
+      // Create a new PDF document with a 1024x1024 page.
       const doc = new jsPDF({
         orientation: 'portrait',
         unit: 'pt',
         format: [1024, 1024]
       });
       
-      // Define margins and dimensions
+      // Define margins and available width.
       const margin = 20;
-      const pageWidth = 1024 - margin * 2;
-      // Place the image in the top half of the PDF.
-      // Here we set the image height to half the page height minus margins.
-      const imageHeight = (1024 / 2) - margin;
+      const availableWidth = 1024 - 2 * margin;
       
-      // Add the image to the PDF
-      doc.addImage(dataUrl, 'PNG', margin, margin, pageWidth, imageHeight);
-      
-      // Set up the text styles
+      // Add the journal title.
       doc.setFontSize(18);
-      doc.setTextColor(22, 48, 43); // Using dark-green (#16302b)
+      doc.setTextColor(22, 48, 43); // dark-green (#16302b)
+      // Center the title horizontally.
+      doc.text(pageData.day, 1024/2, margin + 30, { align: 'center', maxWidth: availableWidth });
       
-      // Add the journal title below the image
-      doc.text(pageData.day, margin, imageHeight + margin + 30);
-      
-      // Add the journal content below the title, wrapping text if necessary.
+      // Add the journal content.
       doc.setFontSize(14);
-      const splitText = doc.splitTextToSize(pageData.content, pageWidth);
-      doc.text(splitText, margin, imageHeight + margin + 60);
+      const contentLines = doc.splitTextToSize(pageData.content, availableWidth);
+      // Calculate the height of the content text (approx. 16pt per line).
+      const textHeight = contentLines.length * 16;
+      const textY = margin + 60; // Starting Y position for content.
+      doc.text(contentLines, 1024/2, textY, { align: 'center', maxWidth: availableWidth });
+      
+      // Determine the Y position where the image should start.
+      const imageY = textY + textHeight + 20;
+      // Calculate the maximum size for the image to keep it square.
+      const availableImageHeight = 1024 - imageY - margin;
+      const imageSize = Math.min(availableWidth, availableImageHeight);
+      // Center the image horizontally.
+      const imageX = (1024 - imageSize) / 2;
+      
+      // Add the image below the text.
+      doc.addImage(dataUrl, 'PNG', imageX, imageY, imageSize, imageSize);
       
       // Save the PDF with a filename based on the journal page title.
       doc.save(`${pageData.day.replace(/\s/g, '_')}.pdf`);
