@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mysterious Botanist Journal</title>
+  <!-- Google Fonts: Roboto Mono for main text, and Press Start 2P for CTA accents -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== New Tailwind-Inspired Palette ===== */
+    :root {
+      --mantis: #6dae47;
+      --beige: #efebce;
+      --dark-green: #16302b;
+      --amaranth-purple: #a4243b;
+      --beaver: #a18276;
+      --light-shadow: rgba(0, 0, 0, 0.1);
+      --card-bg: rgba(239,235,206,0.8);
+    }
+
+    /* ===== Global Styles ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      min-height: 100%;
+      background: var(--beige);
+      color: var(--dark-green);
+      font-family: 'Roboto Mono', monospace;
+      overflow-x: hidden;
+      line-height: 1.5;
+      text-align: center;
+    }
+    a {
+      text-decoration: none;
+      color: var(--mantis);
+    }
+
+    /* ===== Container & Card Styles ===== */
+    .container {
+      width: 90%;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--light-shadow);
+    }
+    .card {
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      background: var(--beige);
+      border: 2px solid var(--mantis);
+      border-radius: 8px;
+      box-shadow: 0 3px 8px var(--light-shadow);
+      text-align: center;
+    }
+
+    /* ===== Hero / Call-to-Action Section ===== */
+    .hero {
+      padding: 40px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, var(--beige), #f0f4e3);
+      border-bottom: 2px solid var(--mantis);
+      margin-bottom: 2rem;
+    }
+    .hero h1 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 2.5em;
+      color: var(--dark-green);
+      text-shadow: 2px 2px 3px var(--light-shadow);
+      margin-bottom: 20px;
+    }
+    .hero p {
+      font-size: 1.1em;
+      margin: 20px auto;
+      max-width: 600px;
+      line-height: 1.4;
+      color: var(--dark-green);
+    }
+    .hero .links {
+      margin-top: 20px;
+    }
+    .hero a {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.9em;
+      margin: 0 10px;
+      padding: 8px 12px;
+      border: 2px solid var(--mantis);
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    .hero a:hover {
+      background: var(--amaranth-purple);
+      color: var(--beige);
+    }
+
+    /* ===== Header with Wallet Connection ===== */
+    header {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      border-bottom: 2px solid var(--mantis);
+      margin-bottom: 2rem;
+    }
+    header h2 {
+      font-size: 2rem;
+      color: var(--mantis);
+      margin-bottom: 0.5rem;
+    }
+    header p {
+      font-size: 1em;
+      color: var(--dark-green);
+    }
+    .wallet-section {
+      margin-top: 1rem;
+      /* padding: 1rem; */
+      /* border: 2px solid var(--mantis);
+      border-radius: 8px; */
+      background: var(--beige);
+      /* box-shadow: 0 3px 8px var(--light-shadow); */
+      display: inline-block;
+      text-align: center;
+    }
+    .wallet-btn {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--amaranth-purple);
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 0.9em;
+      color: var(--beige);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s;
+      margin-bottom: 0.5rem;
+    }
+    .wallet-btn:hover {
+      background: var(--mantis);
+      opacity: 0.9;
+    }
+    .wallet-info {
+      margin-top: 1rem;
+      font-size: 0.9em;
+      color: var(--amaranth-purple);
+      word-break: break-all;
+    }
+
+    /* ===== Notebook (Flipbook) Section ===== */
+    .notebook-section {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .notebook-title {
+      font-size: 1.5em;
+      margin-bottom: 1rem;
+      color: var(--mantis);
+    }
+    .notebook-container {
+      position: relative;
+      width: 300px;
+      height: 400px;
+      margin: 0 auto 1rem auto;
+      perspective: 1200px;
+      border: 2px solid var(--mantis);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--beige);
+    }
+    .notebook-page {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      transform-style: preserve-3d;
+      transition: transform 0.5s ease;
+    }
+    .notebook-nav {
+      margin-top: 1rem;
+    }
+    .notebook-nav button {
+      font-family: 'Roboto Mono', monospace;
+      background: var(--mantis);
+      border: none;
+      padding: 0.6rem 1rem;
+      font-size: 0.9em;
+      color: var(--beige);
+      cursor: pointer;
+      border-radius: 4px;
+      margin: 0 0.5rem;
+      transition: background 0.3s;
+    }
+    .notebook-nav button:hover {
+      background: var(--amaranth-purple);
+      opacity: 0.9;
+    }
+    /* Download Button (visible when wallet connected) */
+    #downloadPage {
+      margin-top: 10px;
+      font-family: 'Roboto Mono', monospace;
+      background: var(--mantis);
+      border: none;
+      padding: 0.6rem 1rem;
+      font-size: 0.9em;
+      color: var(--beige);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s;
+      display: none;
+    }
+    #downloadPage:hover {
+      background: var(--amaranth-purple);
+      opacity: 0.9;
+    }
+
+    /* ===== Journal Entry Section ===== */
+    .entry {
+      background: rgba(109,174,71,0.1);
+      border: 2px solid var(--mantis);
+      border-radius: 8px;
+      padding: 1rem;
+      min-height: 120px;
+      box-shadow: 0 3px 8px var(--light-shadow);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .entry h2 {
+      font-size: 1.2em;
+      margin-bottom: 0.5rem;
+      color: var(--mantis);
+    }
+    .entry p {
+      font-size: 0.95em;
+      color: var(--dark-green);
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.8em;
+      color: var(--amaranth-purple);
+      border-top: 2px solid var(--mantis);
+      margin-top: 2rem;
+    }
+
+    /* ===== Responsive Styles ===== */
+    @media (max-width: 600px) {
+      .notebook-container {
+        width: 90%;
+        height: auto;
+        aspect-ratio: 3/4;
+      }
+      .container, .card {
+        padding: 1rem;
+      }
+      .hero h1 {
+        font-size: 2em;
+      }
+      .hero p, header p, .wallet-info, .entry p {
+        font-size: 0.95em;
+      }
+      .wallet-btn, .notebook-nav button, #downloadPage {
+        font-size: 0.8em;
+        padding: 0.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero / Call-to-Action Section -->
+  <div class="hero">
+    <h1>Mystery Notebook Journal</h1>
+    <p>
+      Uncover the hidden secrets of Dr. Aurelia Green’s mysterious vintage notebook. Flip through enchanted pages, connect your wallet, and immortalize the lost knowledge.
+    </p>
+    <div class="links">
+      <a href="#notebook-section">Explore the Notebook</a>
+      <a href="#lore">Discover the Lore</a>
+      <a href="#journalEntry">Uncover the Journal</a>
+    </div>
+  </div>
+
+  <!-- Header (Optional additional branding) with Wallet Connection -->
+  <header>
+    <h2>Connect &amp; Explore</h2>
+    <p>Connect your Phantom wallet to begin your journey and download pages.</p>
+    <div class="wallet-section">
+      <button class="wallet-btn" id="connectButton">Connect Phantom Wallet</button>
+      <div id="walletInfo" class="wallet-info"></div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Lore Section -->
+    <section id="lore" class="card">
+      <h2>The Botanist's Lore</h2>
+      <p>
+        Dr. Aurelia Green has spent her career traversing forgotten gardens and abandoned greenhouses in search of nature’s hidden secrets. With a passion for blending ancient botanical wisdom with modern innovation, she embarks on an unprecedented journey—merging the organic world with the digital frontier. This mysterious notebook, full of cryptic annotations and curious references, may be the key to unlocking nature’s deepest enigmas.
+      </p>
+    </section>
+
+    <!-- Notebook Flipbook Section (placed above the day entries) -->
+    <section id="notebook-section" class="card">
+      <h2 class="notebook-title">The Mysterious Notebook</h2>
+      <div class="notebook-container">
+        <div class="notebook-page"></div>
+      </div>
+      <div class="notebook-nav">
+        <button id="prevNotebook">&laquo; Prev Page</button>
+        <button id="nextNotebook">Next Page &raquo;</button>
+      </div>
+      <!-- Download Button (shown when wallet connected) -->
+      <button id="downloadPage">Download this Page</button>
+    </section>
+
+    <!-- Journal Entry Section (Synced with Notebook Flipbook) -->
+    <section id="journalEntry" class="card entry">
+      <!-- The journal content will update automatically based on the notebook page -->
+    </section>
+  </div>
+
+  <footer>
+    &copy; 1776 Botanist's Journal. All rights to the people!
+  </footer>
+
+  <script>
+    /**********************************
+     * Journal & Notebook Synchrony   *
+     **********************************/
+    // Journal data for 10 pages
+    const journalPages = [
+    {
+        day: "Cover: The Leather Journal",
+        content: "An intricately embossed leather cover, weathered by time and imbued with secrets of nature and forgotten lore."
+    },
+    {
+        day: "Page 2: Botanical Beginnings",
+        content: "General notes on the surrounding flora—lush greenery, rare blooms, and the soft whispers of an ancient garden."
+    },
+    {
+        day: "Page 3: Verdant Discoveries",
+        content: "Detailed sketches of exotic leaves and curious vines, hinting at the wild magic of nature."
+    },
+    {
+        day: "Page 4: Hidden Life",
+        content: "Observations on microscopic organisms and the delicate balance sustaining a forgotten ecosystem."
+    },
+    {
+        day: "Page 5: Floral Musings",
+        content: "A medley of botanical sketches and poetic musings on the interplay of light and color across ancient petals."
+    },
+    {
+        day: "Page 6: Creatures of the Understory",
+        content: "Notes on the insects, small mammals, and birds that animate the dense undergrowth, lending life to the pages."
+    },
+    {
+        day: "Page 7: Curious Head Salamander",
+        content: "A detailed observation of a salamander with an unusually curious head. Its wide, inquisitive eyes and quirky features suggest a creature full of enigmatic intelligence."
+    },
+    {
+        day: "Page 8: Ancient Salamander",
+        content: "This venerable salamander seems to have witnessed the passage of centuries. Its time-worn scales and measured gait evoke wisdom and mystery."
+    },
+    {
+        day: "Page 9: Electric Salamander",
+        content: "An electrifying specimen with pulsating patterns along its skin. Its vibrant, almost neon hues light up the twilight of the swamp."
+    },
+    {
+        day: "Page 10: Scaled Dinosaur Salamander",
+        content: "A creature reminiscent of prehistoric reptiles, this salamander boasts robust, rugged scales and a presence that commands respect in the wild."
+    },
+    {
+        day: "Page 11: Fire and Volcano Salamander",
+        content: "A being of blazing hues and molten temperament, as if forged in the heart of a volcano. Its fiery colors and dynamic energy are as captivating as they are formidable."
+    },
+    {
+        day: "Page 12: Mythical Ancient Axolotl",
+        content: "Shrouded in myth, this salamander-like axolotl exudes an otherworldly aura. Its mysterious regenerative powers and serene demeanor make it seem almost magical."
+    },
+    {
+        day: "Page 13: Camouflage Marbled Salamander",
+        content: "A master of disguise, this salamander’s marbled patterns allow it to blend seamlessly into its surroundings. A moving enigma on the forest floor, its stealth is as impressive as its beauty."
+    }
+    ];
+    
+    // Notebook images for 10 pages – replace these with your actual images if desired.
+    const notebookPages = [
+        'images/notebook-page1.jpg',
+        'images/notebook-page2.jpg',
+        'images/notebook-page3.jpg',
+        'images/notebook-page4.jpg',
+        'images/notebook-page5.jpg',
+        'images/notebook-page6.jpg',
+        'images/notebook-page7.jpg',
+        'images/notebook-page8.jpg',
+        'images/notebook-page9.jpg',
+        'images/notebook-page10.jpg',
+        'images/notebook-page11.jpg',
+        'images/notebook-page12.jpg',
+        'images/notebook-page13.jpg',
+    ];
+
+    // The current index is used for both the notebook image and the corresponding journal entry.
+    let currentIndex = 0;
+    const notebookPageEl = document.querySelector('.notebook-page');
+    const journalEntryEl = document.getElementById('journalEntry');
+    const downloadBtn = document.getElementById('downloadPage');
+
+    // Update both the notebook image and the journal entry based on currentIndex.
+    function updatePage() {
+      // Update notebook image.
+      notebookPageEl.style.backgroundImage = `url(${notebookPages[currentIndex]})`;
+      // Update journal entry.
+      const pageData = journalPages[currentIndex];
+      journalEntryEl.innerHTML = `
+        <h2>${pageData.day}</h2>
+        <p>${pageData.content}</p>
+      `;
+    }
+
+    // Initialize with the first page.
+    updatePage();
+
+    // Flip to next page with a two-step rotation animation.
+    function flipNextPage() {
+      notebookPageEl.style.transition = 'transform 0.5s ease';
+      notebookPageEl.style.transform = 'rotateY(-90deg)';
+      notebookPageEl.addEventListener('transitionend', function handler() {
+        currentIndex = (currentIndex + 1) % notebookPages.length;
+        updatePage();
+        notebookPageEl.style.transition = 'none';
+        notebookPageEl.style.transform = 'rotateY(90deg)';
+        // Force reflow
+        void notebookPageEl.offsetWidth;
+        notebookPageEl.style.transition = 'transform 0.5s ease';
+        notebookPageEl.style.transform = 'rotateY(0deg)';
+        notebookPageEl.removeEventListener('transitionend', handler);
+      }, { once: true });
+    }
+
+    // Flip to previous page with a similar reverse animation.
+    function flipPrevPage() {
+      notebookPageEl.style.transition = 'transform 0.5s ease';
+      notebookPageEl.style.transform = 'rotateY(90deg)';
+      notebookPageEl.addEventListener('transitionend', function handler() {
+        currentIndex = (currentIndex - 1 + notebookPages.length) % notebookPages.length;
+        updatePage();
+        notebookPageEl.style.transition = 'none';
+        notebookPageEl.style.transform = 'rotateY(-90deg)';
+        void notebookPageEl.offsetWidth;
+        notebookPageEl.style.transition = 'transform 0.5s ease';
+        notebookPageEl.style.transform = 'rotateY(0deg)';
+        notebookPageEl.removeEventListener('transitionend', handler);
+      }, { once: true });
+    }
+
+    document.getElementById('nextNotebook').addEventListener('click', flipNextPage);
+    document.getElementById('prevNotebook').addEventListener('click', flipPrevPage);
+
+    // *********************************
+    // Phantom Wallet Connection
+    // *********************************
+    const connectButton = document.getElementById('connectButton');
+    const walletInfo = document.getElementById('walletInfo');
+
+    const isPhantomInstalled = () => {
+      return window.solana && window.solana.isPhantom;
+    };
+
+    const connectWallet = async () => {
+      if (isPhantomInstalled()) {
+        try {
+          const resp = await window.solana.connect();
+          const walletAddress = resp.publicKey.toString();
+          walletInfo.innerText = `Connected: ${walletAddress}`;
+          connectButton.disabled = true;
+          connectButton.innerText = 'Wallet Connected';
+          // Show the Download button once wallet is connected
+          downloadBtn.style.display = 'inline-block';
+        } catch (err) {
+          console.error('Wallet connection failed:', err);
+          walletInfo.innerText = 'Wallet connection failed. Please try again.';
+        }
+      } else {
+        walletInfo.innerHTML = `Phantom Wallet is not installed. <a href="https://phantom.app/" target="_blank" style="color: var(--mantis);text-decoration:underline;">Get Phantom</a>`;
+      }
+    };
+
+    connectButton.addEventListener('click', connectWallet);
+
+    window.addEventListener('load', async () => {
+      if (isPhantomInstalled()) {
+        try {
+          const resp = await window.solana.connect({ onlyIfTrusted: true });
+          if (resp.publicKey) {
+            walletInfo.innerText = `Connected: ${resp.publicKey.toString()}`;
+            connectButton.disabled = true;
+            connectButton.innerText = 'Wallet Connected';
+            downloadBtn.style.display = 'inline-block';
+          }
+        } catch (err) {
+          // Not auto-connected; no further action.
+        }
+      }
+    });
+
+    // *********************************
+    // Download Current Notebook Page
+    // *********************************
+    function downloadCurrentPage() {
+      const pageData = journalPages[currentIndex];
+      const imageUrl = notebookPages[currentIndex];
+      const content = `
+${pageData.day}
+-------------------
+${pageData.content}
+
+Notebook Image URL: ${imageUrl}
+      `;
+      const blob = new Blob([content], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `${pageData.day.replace(/\s/g, '_')}.txt`;
+      link.click();
+    }
+
+    downloadBtn.addEventListener('click', downloadCurrentPage);
+  </script>
+</body>
+</html>
