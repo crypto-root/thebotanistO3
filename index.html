@@ -242,6 +242,30 @@
       margin-top: 2rem;
     }
 
+    /* Add these styles to your existing CSS */
+    .botanist-img-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .botanist-img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      animation: fadeIn 2s ease-in-out;
+    }
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
     /* ===== Responsive Styles ===== */
     @media (max-width: 600px) {
       .notebook-container {
@@ -267,6 +291,9 @@
 <body>
   <!-- Hero / Call-to-Action Section -->
   <div class="hero">
+    <div class="botanist-img-container">
+      <img src="images/botanist.png" alt="The Botanist" class="botanist-img" />
+    </div>
     <h1>Mystery Notebook Journal</h1>
     <p>
       Uncover the hidden secrets of Dr. Aurelia Green’s mysterious vintage notebook. Flip through enchanted pages, connect your wallet, and immortalize the lost knowledge.
