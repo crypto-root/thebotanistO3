@@ -321,7 +321,26 @@
     &copy; 1776 Botanist's Journal. All rights to the people!
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
+    // Helper function to load an image and convert it to a data URL.
+    function getDataUrl(url, callback) {
+      const img = new Image();
+      img.setAttribute('crossOrigin', 'anonymous'); // Enable CORS if needed.
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        callback(canvas.toDataURL('image/png'));
+      };
+      img.onerror = function() {
+        console.error("Could not load image at " + url);
+        callback(null);
+      };
+      img.src = url;
+    }
     /**********************************
      * Journal & Notebook Synchrony   *
      **********************************/
@@ -506,23 +525,53 @@
     // Download Current Notebook Page
     // *********************************
     function downloadCurrentPage() {
-      const pageData = journalPages[currentIndex];
-      const imageUrl = notebookPages[currentIndex];
-      const content = `
-${pageData.day}
--------------------
-${pageData.content}
+    const pageData = journalPages[currentIndex];
+    const imageUrl = notebookPages[currentIndex];
+    
+    // Load the image and then create the PDF
+    getDataUrl(imageUrl, function(dataUrl) {
+      if (!dataUrl) {
+        alert("Failed to load the image for PDF generation.");
+        return;
+      }
+      // Using jsPDF from the imported library
+      const { jsPDF } = window.jspdf;
+      // Create a new PDF document with a 1024x1024 page size
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'pt',
+        format: [1024, 1024]
+      });
+      
+      // Define margins and dimensions
+      const margin = 20;
+      const pageWidth = 1024 - margin * 2;
+      // Place the image in the top half of the PDF.
+      // Here we set the image height to half the page height minus margins.
+      const imageHeight = (1024 / 2) - margin;
+      
+      // Add the image to the PDF
+      doc.addImage(dataUrl, 'PNG', margin, margin, pageWidth, imageHeight);
+      
+      // Set up the text styles
+      doc.setFontSize(18);
+      doc.setTextColor(22, 48, 43); // Using dark-green (#16302b)
+      
+      // Add the journal title below the image
+      doc.text(pageData.day, margin, imageHeight + margin + 30);
+      
+      // Add the journal content below the title, wrapping text if necessary.
+      doc.setFontSize(14);
+      const splitText = doc.splitTextToSize(pageData.content, pageWidth);
+      doc.text(splitText, margin, imageHeight + margin + 60);
+      
+      // Save the PDF with a filename based on the journal page title.
+      doc.save(`${pageData.day.replace(/\s/g, '_')}.pdf`);
+    });
+  }
 
-Notebook Image URL: ${imageUrl}
-      `;
-      const blob = new Blob([content], { type: 'text/plain' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `${pageData.day.replace(/\s/g, '_')}.txt`;
-      link.click();
-    }
-
-    downloadBtn.addEventListener('click', downloadCurrentPage);
+  // Update the event listener for the download button to use the new PDF function.
+  downloadBtn.addEventListener('click', downloadCurrentPage);
   </script>
 </body>
 </html>
